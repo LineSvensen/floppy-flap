@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import Lottie from "lottie-react";
 import blobAnimation from "./assets/theflob.json";
-import deadImage from "./assets/dead.png";
+import deadImage from "./assets/rip.png";
 import backgroundImage from "./assets/bg-skyy.png"; // or whatever it's named
+import introImage from "./assets/bg-intro.png";
 
 const CanvasGame = () => {
   const canvasRef = useRef(null);
@@ -238,6 +239,11 @@ const CanvasGame = () => {
           height={400}
           className="shadow-md border-black z-10"
         />
+        {showIntro && (
+          <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80">
+            <img src={introImage} alt="Welcome" className="w-72" />
+          </div>
+        )}
 
         <div
           className="absolute w-[50px] h-[50px] pointer-events-none z-20"
