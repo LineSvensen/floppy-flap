@@ -74,7 +74,7 @@ const CanvasGame = () => {
     const speed = 2 + frameCount.current / 1000;
 
     // Clear canvas first
-    c.clearRect(0, 0, 400, canvasHeight);
+    c.clearRect(0, 0, 360, canvasHeight);
 
     // Draw scrolling background (natural width)
     const bg = bgRef.current;
@@ -232,33 +232,39 @@ const CanvasGame = () => {
 
   return (
     <>
-      <div className="relative w-[400px] h-[400px]">
-        <canvas
-          ref={canvasRef}
-          width={400}
-          height={400}
-          className="shadow-md border-black z-10"
-        />
-        {showIntro && (
-          <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80">
-            <img src={introImage} alt="Welcome" className="w-72" />
-          </div>
-        )}
-
-        <div
-          className="absolute w-[50px] h-[50px] pointer-events-none z-20"
-          style={{ left: "175px", top: `${playerY}px` }}
-        >
-          <Lottie animationData={blobAnimation} loop autoplay />
-        </div>
-
-        {gameOver && (
-          <img
-            src={deadImage}
-            alt="You died"
-            className="absolute top-0 left-0 w-full h-full object-contain z-50"
+      <div className="max-w-[360px] mx-auto text-center shadow-xl">
+        <div className="relative h-[400px]">
+          <canvas
+            ref={canvasRef}
+            width={360}
+            height={400}
+            className="z-10 border-sm"
           />
-        )}
+          {showIntro && (
+            <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80">
+              <img
+                src={introImage}
+                alt="Welcome"
+                className="absolute inset-0 w-full h-full object-cover z-50"
+              />
+            </div>
+          )}
+
+          <div
+            className="absolute w-[50px] h-[50px] pointer-events-none z-20"
+            style={{ left: "175px", top: `${playerY}px` }}
+          >
+            <Lottie animationData={blobAnimation} loop autoplay />
+          </div>
+
+          {gameOver && (
+            <img
+              src={deadImage}
+              alt="You died"
+              className="absolute inset-0 w-full h-full object-cover z-50"
+            />
+          )}
+        </div>
       </div>
       <p className="mt-2 font-bold">High Score: {highScore}</p>
       <p className="text-sm">Press SPACE or tap to start/jump</p>
