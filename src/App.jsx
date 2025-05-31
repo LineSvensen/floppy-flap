@@ -11,19 +11,25 @@ const App = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-300 via-white to-pink-300">
-      <h1 className="text-4xl cherry  mt-2 mb-4 pt-2 pb-2">
-        Floppy Flap The Game
-      </h1>
-      <ResponsiveGame highScore={highScore} setHighScore={setHighScore} />
+    <div className="bg-purple-200 md:from-blue-300 md:via-white md:to-pink-300">
+      {/* Main content */}
+      <div className="flex-grow flex flex-col items-center justify-start px-4">
+        <h1 className="text-center text-4xl cherry mt-4 mb-2 md:mb-4">
+          Floppy Flap <br /> The Game
+        </h1>
 
-      <p className="text-center text-lg font-regular text-gray-800 mt-4 mb-2 pl-2 pr-2 cherry">
-        Tap or press SPACE to flap
-      </p>
-      <p className="mt-1 font-bold text-pink-700 text-2xl cherry">
-        Your Highcore: {highScore}
-      </p>
-      <footer className="text-xs text-gray-500 mt-8 mb-4 text-center">
+        <ResponsiveGame highScore={highScore} setHighScore={setHighScore} />
+
+        <p className="text-center text-lg text-gray-800 mt-4 mb-2 px-4 cherry">
+          Tap or press SPACE to flap
+        </p>
+        <p className="mt-1 mb-2 font-bold text-pink-700 text-2xl cherry">
+          Your Highscore: {highScore}
+        </p>
+      </div>
+
+      {/* Footer */}
+      <footer className="text-xs text-gray-500 text-center px-4 py-4">
         <a
           href="https://github.com/LineSvensen"
           target="_blank"

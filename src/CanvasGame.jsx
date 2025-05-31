@@ -20,7 +20,15 @@ const CanvasGame = ({ highScore, setHighScore }) => {
 
   const canvasHeight = 400;
   const pipeWidth = 50;
-  const player = useRef({ x: 175, y: 200, speed: 0, height: 50, width: 50 });
+  const canvasWidth = 344;
+  const player = useRef({
+    x: canvasWidth / 2 - 25,
+    y: 200,
+    speed: 0,
+    height: 50,
+    width: 50,
+  });
+
   const pipes = useRef([]);
   const frameCount = useRef(0);
 
@@ -73,7 +81,7 @@ const CanvasGame = ({ highScore, setHighScore }) => {
     const p = player.current;
     const speed = 2 + frameCount.current / 1000;
 
-    c.clearRect(0, 0, 360, canvasHeight);
+    c.clearRect(0, 0, 344, canvasHeight);
 
     const bg = bgRef.current;
     if (bg && bg.complete) {
@@ -223,45 +231,47 @@ const CanvasGame = ({ highScore, setHighScore }) => {
 
   return (
     <>
-      <div className="max-w-[360px] mx-auto text-center shadow-gray-800/50 shadow-md">
-        <div className="relative h-[400px]">
-          <canvas
-            ref={canvasRef}
-            width={360}
-            height={400}
-            className="z-10 border-sm"
-          />
-          {showIntro && (
-            <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80">
-              <img
-                src={introImage}
-                alt="Welcome"
-                className="absolute inset-0 w-full h-full object-cover z-50"
-              />
-            </div>
-          )}
-
-          <div
-            className="absolute w-[50px] h-[50px] pointer-events-none z-20"
-            style={{ left: "175px", top: `${playerY}px` }}
-          >
-            <Lottie animationData={blobAnimation} loop autoplay />
-          </div>
-
-          {gameOver && (
-            <>
-              <img
-                src={deadImage}
-                alt="You died"
-                className="absolute inset-0 w-full h-full object-cover z-50"
-              />
-              <div className="absolute z-50 flex top-20 left-0 w-full justify-center">
-                <div className="bg-black bg-opacity-60 text-white px-4 py-2 rounded-xl shadow-lg text-md font-bold">
-                  Final Score: {finalScore}
-                </div>
+      <div className="w-full flex justify-center mt-4">
+        <div className="max-w-[344px] mx-auto text-center shadow-gray-800/50 shadow-md">
+          <div className="relative h-[400px]">
+            <canvas
+              ref={canvasRef}
+              width={344}
+              height={400}
+              className="z-10 border-sm"
+            />
+            {showIntro && (
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80">
+                <img
+                  src={introImage}
+                  alt="Welcome"
+                  className="absolute inset-0 w-full h-full object-cover z-50"
+                />
               </div>
-            </>
-          )}
+            )}
+
+            <div
+              className="absolute w-[50px] h-[50px] pointer-events-none z-20"
+              style={{ left: `${canvasWidth / 2 - 25}px`, top: `${playerY}px` }}
+            >
+              <Lottie animationData={blobAnimation} loop autoplay />
+            </div>
+
+            {gameOver && (
+              <>
+                <img
+                  src={deadImage}
+                  alt="You died"
+                  className="absolute inset-0 w-full h-full object-cover z-50"
+                />
+                <div className="absolute z-50 flex top-20 left-0 w-full justify-center">
+                  <div className="bg-black bg-opacity-60 text-white px-4 py-2 rounded-xl shadow-lg text-md font-bold">
+                    Final Score: {finalScore}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </>
