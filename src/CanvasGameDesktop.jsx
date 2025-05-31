@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import Lottie from "lottie-react";
 import blobAnimation from "./assets/theflob.json";
-import deadImage from "./assets/rip.png";
-import backgroundImage from "./assets/bg-skyy.png";
-import introImage from "./assets/bg-intro.png";
+import deadImage from "./assets/rip-desktop.png";
+import backgroundImage from "./assets/bg-desktop.png";
+import introImage from "./assets/intro-desktop.png";
 
-const CanvasGame = ({ highScore, setHighScore }) => {
+const CanvasGameDesktop = ({ highScore, setHighScore }) => {
   const canvasRef = useRef(null);
   const intervalRef = useRef(null);
   const [isRunning, setIsRunning] = useState(false);
@@ -18,7 +18,8 @@ const CanvasGame = ({ highScore, setHighScore }) => {
   const [showIntro, setShowIntro] = useState(true);
   const [finalScore, setFinalScore] = useState(null);
 
-  const canvasHeight = 400;
+  const canvasWidth = 600;
+  const canvasHeight = 600;
   const pipeWidth = 50;
   const player = useRef({ x: 175, y: 200, speed: 0, height: 50, width: 50 });
   const pipes = useRef([]);
@@ -28,6 +29,7 @@ const CanvasGame = ({ highScore, setHighScore }) => {
     if (isRunning) return;
     setGameOver(false);
     setShowIntro(false);
+    player.current.x = canvasWidth / 2 - player.current.width / 2;
     resetGame();
     setIsRunning(true);
     intervalRef.current = setInterval(gameLoop, 20);
@@ -36,6 +38,7 @@ const CanvasGame = ({ highScore, setHighScore }) => {
   const resetGame = () => {
     pipes.current = [];
     player.current.y = 175;
+    player.current.x = canvasWidth / 2 - player.current.width / 2;
     player.current.speed = 0;
     setPlayerY(175);
     frameCount.current = 0;
@@ -59,7 +62,7 @@ const CanvasGame = ({ highScore, setHighScore }) => {
     const topHeight = Math.floor(Math.random() * (maxTop - minTop)) + minTop;
 
     pipes.current.push({
-      x: 400,
+      x: canvasWidth,
       topHeight,
       gap,
       type: pipeType,
@@ -73,7 +76,7 @@ const CanvasGame = ({ highScore, setHighScore }) => {
     const p = player.current;
     const speed = 2 + frameCount.current / 1000;
 
-    c.clearRect(0, 0, 360, canvasHeight);
+    c.clearRect(0, 0, canvasWidth, canvasHeight);
 
     const bg = bgRef.current;
     if (bg && bg.complete) {
@@ -133,7 +136,6 @@ const CanvasGame = ({ highScore, setHighScore }) => {
     c.fillStyle = "black";
     c.font = "20px Arial";
     c.fillText("Score: " + scoreRef.current, 10, 25);
-    console.log("Render Score:", scoreRef.current, "Game Over:", gameOver);
   };
 
   const roundRect = (ctx, x, y, w, h, r) => {
@@ -223,12 +225,12 @@ const CanvasGame = ({ highScore, setHighScore }) => {
 
   return (
     <>
-      <div className="max-w-[360px] mx-auto text-center shadow-gray-800/50 shadow-md">
-        <div className="relative h-[400px]">
+      <div className="mx-auto text-center w-[600px] shadow-gray-800/50 shadow-md">
+        <div className="relative">
           <canvas
             ref={canvasRef}
-            width={360}
-            height={400}
+            width={canvasWidth}
+            height={canvasHeight}
             className="z-10 border-sm"
           />
           {showIntro && (
@@ -243,7 +245,10 @@ const CanvasGame = ({ highScore, setHighScore }) => {
 
           <div
             className="absolute w-[50px] h-[50px] pointer-events-none z-20"
-            style={{ left: "175px", top: `${playerY}px` }}
+            style={{
+              left: `${player.current.x}px`,
+              top: `${playerY}px`,
+            }}
           >
             <Lottie animationData={blobAnimation} loop autoplay />
           </div>
@@ -255,7 +260,7 @@ const CanvasGame = ({ highScore, setHighScore }) => {
                 alt="You died"
                 className="absolute inset-0 w-full h-full object-cover z-50"
               />
-              <div className="absolute z-50 flex top-20 left-0 w-full justify-center">
+              <div className="absolute z-50 flex top-44 left-0 w-full justify-center">
                 <div className="bg-black bg-opacity-60 text-white px-4 py-2 rounded-xl shadow-lg text-md font-bold">
                   Final Score: {finalScore}
                 </div>
@@ -268,4 +273,4 @@ const CanvasGame = ({ highScore, setHighScore }) => {
   );
 };
 
-export default CanvasGame;
+export default CanvasGameDesktop;
