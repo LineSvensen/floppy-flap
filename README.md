@@ -1,3 +1,7 @@
+<p align="center">
+    <img src="src/assets/banner-ff.png" width="" />
+</p>
+
 # <img src="src/assets/small-icon-floppy-flap.png" width="20" /> Floppy Flap - The Game <img src="src/assets/small-icon-floppy-flap.png" width="20" />
 
 <p align="center">
