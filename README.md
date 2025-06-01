@@ -8,6 +8,8 @@
   <img src="src/assets/preview-floppy-flap.gif" width="300" />
 </p>
 
+## Try yourself on https://floppy-flap.vercel.app/
+
 ## 📖 Description
 
 This is a game made from scratch using React, Tailwind, and Vite. Help the little creature named Flob "flap" (jump) through the skies without hitting the pipes. How far can you go? Can you beat your last record? Inspired by the beloved and now-retired mobile game, Flappy Bird.
