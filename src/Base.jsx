@@ -1,11 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import Lottie from "lottie-react";
-import blobAnimation from "./assets/theflob.json";
-import deadImage from "./assets/rip.png";
-import backgroundImage from "./assets/bg-skyy.png";
-import introImage from "./assets/bg-intro.png";
 
-const CanvasGame = ({ highScore, setHighScore }) => {
+const CanvasGameBase = ({
+  canvasWidth,
+  canvasHeight,
+  backgroundImage,
+  introImage,
+  deadImage,
+  wrapperClass,
+  playerX,
+  highScore,
+  setHighScore,
+  blobAnimation,
+}) => {
   const canvasRef = useRef(null);
   const intervalRef = useRef(null);
   const [isRunning, setIsRunning] = useState(false);
@@ -18,15 +25,14 @@ const CanvasGame = ({ highScore, setHighScore }) => {
   const [showIntro, setShowIntro] = useState(true);
   const [finalScore, setFinalScore] = useState(null);
 
-  const canvasHeight = 400;
   const pipeWidth = 50;
-  const canvasWidth = 344;
   const player = useRef({
-    x: canvasWidth / 2 - 25,
+    x: playerX,
     y: 200,
     speed: 0,
     height: 50,
     width: 50,
+    collisionPadding: 12,
   });
 
   const pipes = useRef([]);
@@ -64,10 +70,16 @@ const CanvasGame = ({ highScore, setHighScore }) => {
 
     const minTop = 40;
     const maxTop = canvasHeight - gap - 40;
-    const topHeight = Math.floor(Math.random() * (maxTop - minTop)) + minTop;
+
+    let topHeight = Math.floor(Math.random() * (maxTop - minTop)) + minTop;
+
+    const minSinglePipeHeight = 100;
+    if (pipeType !== "both" && topHeight < minSinglePipeHeight) {
+      topHeight = minSinglePipeHeight;
+    }
 
     pipes.current.push({
-      x: 400,
+      x: canvasWidth,
       topHeight,
       gap,
       type: pipeType,
@@ -81,7 +93,7 @@ const CanvasGame = ({ highScore, setHighScore }) => {
     const p = player.current;
     const speed = 2 + frameCount.current / 1000;
 
-    c.clearRect(0, 0, 344, canvasHeight);
+    c.clearRect(0, 0, canvasWidth, canvasHeight);
 
     const bg = bgRef.current;
     if (bg && bg.complete) {
@@ -141,7 +153,6 @@ const CanvasGame = ({ highScore, setHighScore }) => {
     c.fillStyle = "black";
     c.font = "20px Arial";
     c.fillText("Score: " + scoreRef.current, 10, 25);
-    console.log("Render Score:", scoreRef.current, "Game Over:", gameOver);
   };
 
   const roundRect = (ctx, x, y, w, h, r) => {
@@ -165,12 +176,21 @@ const CanvasGame = ({ highScore, setHighScore }) => {
     const outOfBounds = p.y < 0 || p.y + p.height > canvasHeight;
 
     const hit = pipes.current.some((pipe) => {
-      const inX = p.x + p.width > pipe.x && p.x < pipe.x + pipeWidth;
+      const padding = p.collisionPadding || 0;
       const bY = pipe.topHeight + pipe.gap;
+
+      const inX =
+        p.x + padding + p.width - padding * 2 > pipe.x &&
+        p.x + padding < pipe.x + pipeWidth;
+
       const hitTop =
-        (pipe.type === "top" || pipe.type === "both") && p.y < pipe.topHeight;
+        (pipe.type === "top" || pipe.type === "both") &&
+        p.y + padding < pipe.topHeight;
+
       const hitBottom =
-        (pipe.type === "bottom" || pipe.type === "both") && p.y + p.height > bY;
+        (pipe.type === "bottom" || pipe.type === "both") &&
+        p.y + p.height - padding > bY;
+
       return inX && (hitTop || hitBottom);
     });
 
@@ -181,7 +201,6 @@ const CanvasGame = ({ highScore, setHighScore }) => {
 
     if (outOfBounds || hit) {
       setFinalScore(scoreRef.current);
-
       resetGame();
       setGameOver(true);
     }
@@ -230,52 +249,52 @@ const CanvasGame = ({ highScore, setHighScore }) => {
   }, []);
 
   return (
-    <>
-      <div className="w-full flex justify-center mt-4">
-        <div className="max-w-[344px] mx-auto text-center shadow-gray-800/50 shadow-md">
-          <div className="relative h-[400px]">
-            <canvas
-              ref={canvasRef}
-              width={344}
-              height={400}
-              className="z-10 border-sm"
+    <div className={wrapperClass}>
+      <div
+        className="relative"
+        style={{ width: canvasWidth, height: canvasHeight }}
+      >
+        <canvas
+          ref={canvasRef}
+          width={canvasWidth}
+          height={canvasHeight}
+          className="z-10"
+        />
+
+        {showIntro && (
+          <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80">
+            <img
+              src={introImage}
+              alt="Welcome"
+              className="absolute inset-0 w-full h-full object-cover z-50"
             />
-            {showIntro && (
-              <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80">
-                <img
-                  src={introImage}
-                  alt="Welcome"
-                  className="absolute inset-0 w-full h-full object-cover z-50"
-                />
-              </div>
-            )}
-
-            <div
-              className="absolute w-[50px] h-[50px] pointer-events-none z-20"
-              style={{ left: `${canvasWidth / 2 - 25}px`, top: `${playerY}px` }}
-            >
-              <Lottie animationData={blobAnimation} loop autoplay />
-            </div>
-
-            {gameOver && (
-              <>
-                <img
-                  src={deadImage}
-                  alt="You died"
-                  className="absolute inset-0 w-full h-full object-cover z-50"
-                />
-                <div className="absolute z-50 flex top-20 left-0 w-full justify-center">
-                  <div className="bg-black bg-opacity-60 text-white px-4 py-2 rounded-xl shadow-lg text-md font-bold">
-                    Final Score: {finalScore}
-                  </div>
-                </div>
-              </>
-            )}
           </div>
+        )}
+
+        <div
+          className="absolute w-[50px] h-[50px] pointer-events-none z-20"
+          style={{ left: `${player.current.x}px`, top: `${playerY}px` }}
+        >
+          <Lottie animationData={blobAnimation} loop autoplay />
         </div>
+
+        {gameOver && (
+          <>
+            <img
+              src={deadImage}
+              alt="You died"
+              className="absolute inset-0 w-full h-full object-cover z-50"
+            />
+            <div className="absolute z-50 flex top-22 md:top-42 left-0 w-full justify-center">
+              <div className="bg-black bg-opacity-60 text-white px-4 py-2 rounded-xl shadow-lg text-md font-bold">
+                Final Score: {finalScore}
+              </div>
+            </div>
+          </>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 
-export default CanvasGame;
+export default CanvasGameBase;

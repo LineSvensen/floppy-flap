@@ -49,11 +49,11 @@ As the first complete game I've created, it's been a lot of fun watching it come
 ├── src/
 │   ├── assets/
 │   ├──App.jsx
-│   ├──CanvasGame.jsx
-│   ├──CanvasGameDesktop.jsx
+│   ├──Mobile.jsx
+│   ├──Desktop.jsx
 │   ├──index.css
 │   ├──main.jsx
-│   ├──ResponsiveGame.jsx
+│   ├──Responsive.jsx
 ├── index.html
 ├── tailwind.config.js
 ├── vite.config.js

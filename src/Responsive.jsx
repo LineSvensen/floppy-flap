@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import CanvasGame from "./CanvasGame";
-import CanvasGameDesktop from "./CanvasGameDesktop";
+import CanvasGame from "./Mobile";
+import CanvasGameDesktop from "./Desktop";
 
 const ResponsiveGame = ({ highScore, setHighScore }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 599);

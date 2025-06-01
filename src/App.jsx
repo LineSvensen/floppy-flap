@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import ResponsiveGame from "./ResponsiveGame";
+import ResponsiveGame from "./Responsive";
 import githubLogo from "./assets/github-logo.png";
 
 const App = () => {
